@@ -57,7 +57,13 @@ public class Launcher
     /// <summary>
     /// The path to the config file.
     /// </summary>
-    public readonly static string ConfigPath = Path.Combine(RootDir, "freeze.ini");
+    public static string ConfigPath
+    {
+        get
+        {
+            return Path.Combine(RootDir, "freeze.ini");
+        }
+    }
 
     #endregion
 
@@ -97,6 +103,8 @@ public class Launcher
                 arguments = line.Split('=')[1].Trim();
             }
         }
+        // Add additional arguments.
+        arguments += " " + controllerArgs;
         controller.StartInfo.Arguments = arguments;
         controller.StartInfo.UseShellExecute = false;
         controller.StartInfo.RedirectStandardOutput = true;
