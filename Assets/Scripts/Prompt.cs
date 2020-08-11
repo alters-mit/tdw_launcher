@@ -59,10 +59,12 @@ public class Prompt : MonoBehaviour
     /// </summary>
     private void Launch()
     {
+        // Don't launch if there is already a controller running.
         if (launcher != null)
         {
             return;
         }
+        // Check for problems.
         List<string> warnings = new List<string>();
         if (!Launcher.ControllerExists)
         {
@@ -76,6 +78,8 @@ public class Prompt : MonoBehaviour
         {
             warnings.Add("Please enter a number.");
         }
+
+        // Output warnings. Don't launch.
         if (warnings.Count > 0)
         {
             string w = "";
@@ -89,6 +93,7 @@ public class Prompt : MonoBehaviour
             }
             message.text = w;
         }
+        // Launch the controller.
         else
         {
             launcher = new Launcher(prompt.text);
