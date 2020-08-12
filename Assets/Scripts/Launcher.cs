@@ -25,16 +25,6 @@ public class Launcher
         }
     }
     /// <summary>
-    /// Returns true if the config file exists.
-    /// </summary>
-    public static bool ConfigExists
-    {
-        get
-        {
-            return new FileInfo(ConfigPath).Exists;
-        }
-    }
-    /// <summary>
     /// The path to the shortcut for the controller executable.
     /// (The shortcut might include arguments.)
     /// </summary>
@@ -52,16 +42,6 @@ public class Launcher
                 p += ".app";
             }
             return p;
-        }
-    }
-    /// <summary>
-    /// The path to the config file.
-    /// </summary>
-    public static string ConfigPath
-    {
-        get
-        {
-            return Path.Combine(RootDir, "freeze.ini");
         }
     }
 
@@ -92,20 +72,7 @@ public class Launcher
         controller = new Process();
         controller.StartInfo.FileName = ControllerPath;
         controller.StartInfo.WorkingDirectory = RootDir;
-
-        // Parse the arguments.
-        string config = File.ReadAllText(ConfigPath);
-        string arguments = "";
-        foreach (string line in config.Split('\n'))
-        {
-            if (line.StartsWith("args="))
-            {
-                arguments = line.Split('=')[1].Trim();
-            }
-        }
-        // Add additional arguments.
-        arguments += " " + controllerArgs;
-        controller.StartInfo.Arguments = arguments;
+        controller.StartInfo.Arguments = controllerArgs;
         controller.StartInfo.UseShellExecute = false;
         controller.StartInfo.RedirectStandardOutput = true;
     }

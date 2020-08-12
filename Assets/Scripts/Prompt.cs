@@ -70,10 +70,6 @@ public class Prompt : MonoBehaviour
         {
             warnings.Add("No controller found at: " + Launcher.ControllerPath);
         }
-        if (!Launcher.ConfigExists)
-        {
-            warnings.Add("No config file found at: " + Launcher.ConfigPath);
-        }
         if (prompt.text == "")
         {
             warnings.Add("Please enter a number.");
