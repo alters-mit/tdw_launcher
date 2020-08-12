@@ -1,7 +1,8 @@
 from argparse import ArgumentParser
-from tdw.controller import Controller
+from tdw.keyboard_controller import KeyboardController
 from tdw.tdw_utils import TDWUtils
-import keyboard
+from tdw.output_data import OutputData, Images
+from pathlib import Path
 
 
 """
@@ -9,86 +10,95 @@ A simple controller to test tdw_launcher.
 
 Requirements:
 
-- Python:
-    1. tdw
-    2. keyboard
-- tdw repo
-- tdw_launcher application
+- tdw repo: https://github.com/threedworld-mit/
+- tdw Python module: https://github.com/threedworld-mit/tdw/blob/master/Documentation/getting_started.md
+- tdw_launcher application (available in the Releases page of this repo)
 
 Usage:
 
-1. cd path/to/tdw/Python
-2. python3 freeze.py --controller path/to/tdw_launcher/test.py
+1. cd path/to/tdw/Python (replace path/to with the actual path to the tdw repo)
+2. python3 freeze.py --controller path/to/tdw_launcher/test.py (replace path/to with the actual path to THIS repo)
 3. <run tdw_launcher>
 4. Enter a number and press OK.
 
-Note: Replace path/to with actual paths.
+Result: 
 
-Result: The controller and build launch. A room is created from the number that your input.
-Use arrow keys to rotate the camera. Press Esc to quit.
+- The controller and build launch. A room is created from the number that your input.
+- Images are saved per frame.
+- Use arrow keys to rotate the camera. Press Esc to quit.
 """
 
 
-class KeyboardController(Controller):
-    def __init__(self, size: int, angle: int = 15, port: int = 1071, display: int = None):
+class ExampleController(KeyboardController):
+    def __init__(self, size: int, angle: int = 15, port: int = 1071):
         """
         :param size: The dimensions of the room.
         :param angle: Angle of rotation.
         :param port: Port for the build.
-        :param display: Display number (optional).
         """
 
-        super().__init__(port=port, display=display)
+        super().__init__(port=port)
         self.angle = angle
         self.done = False
         self.size = size
+        self.images_directory = Path("images")
+        if not self.images_directory.exists():
+            self.images_directory.mkdir()
+        self.images_directory = str(self.images_directory.resolve())
 
     def run(self):
         self.start()
         commands = [TDWUtils.create_empty_room(self.size, self.size)]
         commands.extend(TDWUtils.create_avatar(position={"x": 0, "y": 1.5, "z": 0}, avatar_id="a"))
+        commands.extend([{"$type": "set_pass_masks",
+                          "avatar_id": "a",
+                          "pass_masks": ["_img"]},
+                         {"$type": "send_images",
+                          "frequency": "always"}])
         self.communicate(commands)
 
         # Listen for keys.
-        keyboard.on_press_key("left", self.on_left)
-        keyboard.on_press_key("right", self.on_right)
+        # Turn left.
+        self.listen(key="left", commands={"$type": "rotate_sensor_container_by",
+                                                "axis": "yaw",
+                                                "angle": self.angle * -1,
+                                                "sensor_name": "SensorContainer",
+                                                "avatar_id": "a"})
+        # Turn right.
+        self.listen(key="right", commands={"$type": "rotate_sensor_container_by",
+                                           "axis": "yaw",
+                                           "angle": self.angle,
+                                           "sensor_name": "SensorContainer",
+                                           "avatar_id": "a"})
         # Quit the application.
-        keyboard.on_press_key("esc", self.on_esc)
+        self.listen(key="esc", function=self.stop)
 
         # Continue until the quit key is pressed.
+        i = 0
         while not self.done:
-            continue
+            # Listen for keyboard input. Receive output data.
+            resp = self.communicate([])
+            for r in resp[:-1]:
+                r_id = OutputData.get_data_type_id(r)
+                # Save images.
+                if r_id == "imag":
+                    TDWUtils.save_images(images=Images(r),
+                                         output_directory=self.images_directory,
+                                         filename=TDWUtils.zero_padding(i, width=4))
+                    i += 1
         self.communicate({"$type": "terminate"})
 
-    def on_left(self, e):
+    def stop(self):
         """
-        Handle left key press.
-        """
-
-        self.communicate([{"$type": "rotate_sensor_container_by",
-                           "axis": "yaw",
-                           "angle": self.angle * -1,
-                           "sensor_name": "SensorContainer",
-                           "avatar_id": "a"}])
-
-    def on_right(self, e):
-        """
-        Handle left key press.
+        Stop the simulation.
         """
 
-        self.communicate([{"$type": "rotate_sensor_container_by",
-                           "axis": "yaw",
-                           "angle": self.angle,
-                           "sensor_name": "SensorContainer",
-                           "avatar_id": "a"}])
-
-    def on_esc(self, e):
         self.done = True
 
 
 if __name__ == "__main__":
     # Listen for a "size" argument from tdw_launcher's input box.
     parser = ArgumentParser()
-    parser.add_argument("size", type=int, default=20)
+    parser.add_argument("size", type=int)
     args = parser.parse_args()
-    KeyboardController(size=args.size).run()
+    ExampleController(size=args.size).run()
