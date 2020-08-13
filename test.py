@@ -7,25 +7,6 @@ from pathlib import Path
 
 """
 A simple controller to test tdw_launcher.
-
-Requirements:
-
-- tdw repo: https://github.com/threedworld-mit/
-- tdw Python module: https://github.com/threedworld-mit/tdw/blob/master/Documentation/getting_started.md
-- tdw_launcher application (available in the Releases page of this repo)
-
-Usage:
-
-1. cd path/to/tdw/Python (replace path/to with the actual path to the tdw repo)
-2. python3 freeze.py --controller path/to/tdw_launcher/test.py (replace path/to with the actual path to THIS repo)
-3. <run tdw_launcher>
-4. Enter a number and press OK.
-
-Result: 
-
-- The controller and build launch. A room is created from the number that your input.
-- Images are saved per frame.
-- Use arrow keys to rotate the camera. Press Esc to quit.
 """
 
 
@@ -60,10 +41,10 @@ class ExampleController(KeyboardController):
         # Listen for keys.
         # Turn left.
         self.listen(key="left", commands={"$type": "rotate_sensor_container_by",
-                                                "axis": "yaw",
-                                                "angle": self.angle * -1,
-                                                "sensor_name": "SensorContainer",
-                                                "avatar_id": "a"})
+                                          "axis": "yaw",
+                                          "angle": self.angle * -1,
+                                          "sensor_name": "SensorContainer",
+                                          "avatar_id": "a"})
         # Turn right.
         self.listen(key="right", commands={"$type": "rotate_sensor_container_by",
                                            "axis": "yaw",
@@ -85,6 +66,7 @@ class ExampleController(KeyboardController):
                     TDWUtils.save_images(images=Images(r),
                                          output_directory=self.images_directory,
                                          filename=TDWUtils.zero_padding(i, width=4))
+                    # Increment the image number.
                     i += 1
         self.communicate({"$type": "terminate"})
 

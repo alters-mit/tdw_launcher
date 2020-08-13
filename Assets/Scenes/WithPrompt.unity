@@ -191,7 +191,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Please enter your number:'
+  m_Text: 'Please enter your code:'
 --- !u!222 &16384622
 CanvasRenderer:
   m_ObjectHideFlags: 0
