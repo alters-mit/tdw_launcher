@@ -28,3 +28,4 @@ ExportedObj/
 *.fbx
 *.obj
 *.mtl
+bin/
