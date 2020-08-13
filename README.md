@@ -38,9 +38,7 @@ tdw_launcher/
 ........img_0001.jpg
 ```
 
-***
-
-To use this script with tdw_launcher, you need to [freeze the controller code](https://github.com/threedworld-mit/tdw/blob/master/Documentation/misc_frontend/freeze.md):
+To use run `test.py` with tdw_launcher, you need to [freeze the controller code](https://github.com/threedworld-mit/tdw/blob/master/Documentation/misc_frontend/freeze.md):
 
 1. `cd path/to/tdw/Python` (replace `path/to` with the path to the `tdw` repo)
 2. Freeze the code:
@@ -55,7 +53,9 @@ To use this script with tdw_launcher, you need to [freeze the controller code](h
 
 Running `freeze.py` will create a binary executable of `test.py` located here: `~/tdw_build/tdw_controller/` (where `~` is your home directory). 
 
-The next time your run the tdw_launcher application it will:
+### How tdw_launcher works
+
+Assuming you have a frozen controller binary with the expected filepath, when you run the tdw_launcher application it will:
 
 - Prompt you for a "code". Enter a number, such as 20.
 - When you press OK, tdw_launcher will launch the executable found in `~/tdw_build/tdw_controller/` with the text you entered as an argument. For  example: `~/tdw_build/tdw_controller/tdw_controller.exe 20`
