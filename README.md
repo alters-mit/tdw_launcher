@@ -2,6 +2,8 @@
 
 `tdw_launcher` is a small application that will launch a controller and a build.
 
+![](tdw_launcher.jpg)
+
 This application will do the following:
 
 1. Prompt the user to input a "code", which is actually a command-line argument for a [TDW controller](https://github.com/threedworld-mit/tdw/blob/master/Documentation/getting_started.md#the-controller).
@@ -51,7 +53,7 @@ To use this script with tdw_launcher, you need to [freeze the controller code](h
 
 ***
 
-Running `freeze.py` will create a binary exectuable of `test.py` located here: `~/tdw_build/tdw_controller/` (where `~` is your home directory). 
+Running `freeze.py` will create a binary executable of `test.py` located here: `~/tdw_build/tdw_controller/` (where `~` is your home directory). 
 
 The next time your run the tdw_launcher application it will:
 
