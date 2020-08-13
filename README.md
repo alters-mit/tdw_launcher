@@ -20,7 +20,7 @@ You need:
 - Python3
 - The [tdw repo](https://github.com/threedworld-mit/tdw)
 - The [`tdw` pip module](https://github.com/threedworld-mit/tdw/blob/master/Documentation/getting_started.md#installation)
-- A compiled executable of tdw_launcher (found in the Releases page in this repo)
+- [A compiled executable of tdw_launcher](https://github.com/alters-mit/tdw_launcher/releases/latest)
 
 ### Testing
 
@@ -86,5 +86,5 @@ Any computer that uses tdw_launcher needs the following:
 
 - Windows, OS X, or Linux
 - An Internet connection
-- The tdw_launcher application
+- [The tdw_launcher application](https://github.com/alters-mit/tdw_launcher/releases/latest)
 - Your frozen controller binary executable, located at: `~/tdw_build/tdw_controller/` (where `~` is the computer's home directory). 
