@@ -1,6 +1,6 @@
 # tdw_launcher
 
-`tdw_launcher` is small application that will launch a controller and a build.
+`tdw_launcher` is a small application that will launch a controller and a build.
 
 This application will do the following:
 
